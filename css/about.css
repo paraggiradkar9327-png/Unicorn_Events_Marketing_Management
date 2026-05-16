@@ -827,24 +827,7 @@
   padding-top: 4px;
 }
 
-.section-title-line {
-  display: flex;
-  align-items: baseline;
-  gap: 14px;
-  color: #d4a017;
-  font-size: 12px;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  font-weight: 500;
-}
 
-.section-title-line::before {
-  content: "";
-  width: 35px;
-  height: 1px;
-  background: #d4a017;
-  display: block;
-}
 
 /* ─── CTA — DRAMATIC FULL BLEED ─── */
 .au-cta {
