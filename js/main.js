@@ -7,6 +7,8 @@
 (function () {
   'use strict';
 
+
+
   // ─── NAVBAR SCROLL EFFECT ─────────────────────────────────
   function initNavbar() {
     const navbar = document.getElementById('navbar');
