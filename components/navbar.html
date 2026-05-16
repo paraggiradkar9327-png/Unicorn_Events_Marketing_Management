@@ -1,0 +1,45 @@
+<!-- ═══════════════════════════════════════════
+     NAVBAR — shared component
+     Loaded by components.js into every page.
+     Active link is set automatically based on
+     the current page URL (window.location.pathname).
+═══════════════════════════════════════════ -->
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">
+    <img src="assets/logo.png" alt="Unicorn Events Logo" class="nav-logo-img" />
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-page="index">Home</a></li>
+    <li><a href="about.html" data-page="about">About</a></li>
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#events">Events</a></li>
+    <li class="has-dropdown" data-page="team director">
+      <a href="#">Team</a>
+      <div class="nav-dropdown">
+        <a href="director.html" data-page="director">Our Director</a>
+        <a href="team.html" data-page="team">Our Team</a>
+      </div>
+    </li>
+    <li><a href="index.html#gallery">Gallery</a></li>
+    <li><a href="index.html#clients">Clients</a></li>
+    <li><a href="contact.html" data-page="contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="index.html#services">Services</a>
+  <a href="index.html#events">Events</a>
+  <a href="director.html" style="padding-left:28px;">— Our Director</a>
+  <a href="team.html" style="padding-left:28px;">— Our Team</a>
+  <a href="index.html#gallery">Gallery</a>
+  <a href="index.html#clients">Clients</a>
+  <a href="contact.html">Contact</a>
+</div>
