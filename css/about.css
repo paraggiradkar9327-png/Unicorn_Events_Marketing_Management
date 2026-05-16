@@ -584,7 +584,7 @@
 }
 
 .au-values-sub {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--fg2);
   line-height: 1.8;
   font-weight: 300;
@@ -825,6 +825,25 @@
   color: var(--fg2);
   line-height: 1.75;
   padding-top: 4px;
+}
+
+.section-title-line {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  color: #d4a017;
+  font-size: 12px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.section-title-line::before {
+  content: "";
+  width: 35px;
+  height: 1px;
+  background: #d4a017;
+  display: block;
 }
 
 /* ─── CTA — DRAMATIC FULL BLEED ─── */
@@ -1180,6 +1199,10 @@
   flex-shrink: 0;
   cursor: pointer;
   position: relative;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0;
 
 }
 
@@ -1211,6 +1234,7 @@
   white-space: nowrap;
   transition: color 0.3s;
   font-weight: 500;
+  background: transparent !important;
 }
 
 .hwa-dot-wrap.active .hwa-dot-label {

@@ -8,7 +8,7 @@
     var COPY = {
         eyebrow: 'Our Process',
         heading: 'How We <em>Work</em>',
-        intro: '',
+
         deliverablesLabel: 'Key Deliverables'
     };
 
