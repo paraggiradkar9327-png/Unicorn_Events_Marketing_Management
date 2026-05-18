@@ -14,14 +14,14 @@
   'use strict';
 
   // ─── CONFIG ───────────────────────────────────────────────
-  const ADMIN_PASSWORD   = 'unicorn2026';
-  const SECRET_KEY       = '`';   // tilde/backtick key
-  const SECRET_PRESSES   = 3;     // how many times to press it
+  const ADMIN_PASSWORD = 'unicorn2026';
+  const SECRET_KEY = '`';   // tilde/backtick key
+  const SECRET_PRESSES = 3;     // how many times to press it
   const SECRET_WINDOW_MS = 1500;  // within this time window
-  const DB_NAME          = 'unicornEventsAdmin';
-  const DB_VERSION       = 1;
-  const STORE_NAME       = 'heroVideo';
-  const VIDEO_KEY        = 'currentVideo';
+  const DB_NAME = 'unicornEventsAdmin';
+  const DB_VERSION = 1;
+  const STORE_NAME = 'heroVideo';
+  const VIDEO_KEY = 'currentVideo';
   // ──────────────────────────────────────────────────────────
 
   let keyPressLog = [];
@@ -35,27 +35,27 @@
         e.target.result.createObjectStore(STORE_NAME);
       };
       req.onsuccess = (e) => resolve(e.target.result);
-      req.onerror   = (e) => reject(e.target.error);
+      req.onerror = (e) => reject(e.target.error);
     });
   }
 
   function saveVideoToDB(blob) {
     return new Promise((resolve, reject) => {
-      const tx    = db.transaction(STORE_NAME, 'readwrite');
+      const tx = db.transaction(STORE_NAME, 'readwrite');
       const store = tx.objectStore(STORE_NAME);
-      const req   = store.put(blob, VIDEO_KEY);
+      const req = store.put(blob, VIDEO_KEY);
       req.onsuccess = () => resolve();
-      req.onerror   = (e) => reject(e.target.error);
+      req.onerror = (e) => reject(e.target.error);
     });
   }
 
   function getVideoFromDB() {
     return new Promise((resolve, reject) => {
-      const tx    = db.transaction(STORE_NAME, 'readonly');
+      const tx = db.transaction(STORE_NAME, 'readonly');
       const store = tx.objectStore(STORE_NAME);
-      const req   = store.get(VIDEO_KEY);
+      const req = store.get(VIDEO_KEY);
       req.onsuccess = (e) => resolve(e.target.result || null);
-      req.onerror   = (e) => reject(e.target.error);
+      req.onerror = (e) => reject(e.target.error);
     });
   }
 
@@ -68,12 +68,12 @@
     if (source) source.src = url;
     else {
       const s = document.createElement('source');
-      s.src  = url;
+      s.src = url;
       s.type = 'video/mp4';
       heroVideo.appendChild(s);
     }
     heroVideo.load();
-    heroVideo.play().catch(() => {});
+    heroVideo.play().catch(() => { });
   }
 
   // ─── LOAD SAVED VIDEO ON PAGE LOAD ───────────────────────
@@ -133,21 +133,21 @@
 
   function resetToPasswordStep() {
     document.getElementById('admin-step-password').style.display = 'block';
-    document.getElementById('admin-step-upload').style.display   = 'none';
+    document.getElementById('admin-step-upload').style.display = 'none';
     document.getElementById('admin-password-input').value = '';
-    document.getElementById('admin-password-error').textContent  = '';
+    document.getElementById('admin-password-error').textContent = '';
   }
 
   // ─── PASSWORD STEP ────────────────────────────────────────
   function handlePasswordSubmit() {
     const input = document.getElementById('admin-password-input');
     const error = document.getElementById('admin-password-error');
-    const val   = input.value.trim();
+    const val = input.value.trim();
 
     if (val === ADMIN_PASSWORD) {
       error.textContent = '';
       document.getElementById('admin-step-password').style.display = 'none';
-      document.getElementById('admin-step-upload').style.display   = 'block';
+      document.getElementById('admin-step-upload').style.display = 'block';
     } else {
       error.textContent = 'Incorrect password. Please try again.';
       input.value = '';
@@ -160,20 +160,20 @@
     if (!file) return;
 
     const nameEl = document.getElementById('upload-filename');
-    const btn    = document.getElementById('upload-submit-btn');
+    const btn = document.getElementById('upload-submit-btn');
     nameEl.textContent = file.name;
     btn.disabled = false;
   }
 
   async function handleUploadSubmit() {
     const fileInput = document.getElementById('video-file-input');
-    const file      = fileInput.files[0];
+    const file = fileInput.files[0];
     if (!file) return;
 
-    const btn      = document.getElementById('upload-submit-btn');
+    const btn = document.getElementById('upload-submit-btn');
     const progress = document.getElementById('upload-progress');
-    const bar      = document.getElementById('upload-progress-bar');
-    const success  = document.getElementById('upload-success');
+    const bar = document.getElementById('upload-progress-bar');
+    const success = document.getElementById('upload-success');
 
     btn.disabled = true;
     btn.textContent = 'Saving...';
@@ -285,5 +285,8 @@
     initSecretTrigger();
     initEvents();
   });
+
+  // Run after DOM is ready
+  document.addEventListener('DOMContentLoaded', renderBrandGrid);
 
 })();

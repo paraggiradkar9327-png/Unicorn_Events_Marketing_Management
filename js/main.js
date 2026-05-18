@@ -174,22 +174,8 @@
     }, 50);
   });
 
-  const brands = [
 
-    // Add more brands here
-  ];
 
-  const grid = document.querySelector('.brand-grid');
-  brands.forEach(b => {
-    const card = document.createElement('div');
-    card.className = 'brand-card';
-    card.innerHTML = `
-    <div class="brand-inner">
-      <div class="brand-front"><img src="${b.front}" alt=""></div>
-      <div class="brand-back"><img src="${b.back}" alt=""></div>
-    </div>`;
-    grid.appendChild(card);
-  });
 
 
 })();
