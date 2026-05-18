@@ -13,7 +13,10 @@
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/brand_orbit.css" />
   <link rel="stylesheet" href="css/admin.css" />
+
+
 </head>
 
 <body>
@@ -224,65 +227,74 @@
   <!-- ═══════════════════════════════════════════
        GALLERY
   ═══════════════════════════════════════════ -->
-  <section id="gallery">
-    <div class="container">
-      <div class="fade-in">
-        <span class="section-title-line">Visual Showcase</span>
-        <h2 class="section-title">Behind the <em>Scenes</em></h2>
+  <section id="process">
+    <div class="container fade-in">
+      <div class="process-header">
+        <div>
+          <span class=" section-title-line">Our Process</span>
 
-        <p class="section-desc">Every frame captures the atmosphere, energy, and detail that defines a Unicorn Event
-          production.</p>
+        </div>
+        <h2 class="section-title">Event Planning <em>Journey</em></h2>
+        <p class="section-desc">
+          From concept to celebration, here's how we make your event unforgettable.
+        </p>
       </div>
 
-      <div class="gallery-grid">
-        <div class="gallery-item fade-in">
-          <div class="gallery-placeholder" style="background:linear-gradient(135deg,#0d1a2a,#1a3040);"></div>
-          <div class="gallery-overlay"><span class="gallery-caption">Corporate Gala — Dubai 2026</span></div>
+      <div class="timeline">
+        <div class="step">
+          <div class="icon">💡</div>
+          <h3>Concept & Vision</h3>
+          <p>Understanding your goals and ideas.</p>
         </div>
-        <div class="gallery-item fade-in">
-          <div class="gallery-placeholder"
-            style="background:linear-gradient(135deg,#2a1a3a,#1a0d28);aspect-ratio:16/9;"></div>
-          <div class="gallery-overlay"><span class="gallery-caption">Brand Activation — NYC</span></div>
+        <div class="step">
+          <div class="icon">📝</div>
+          <h3>Design & Planning</h3>
+          <p>Crafting a unique and detailed plan.</p>
         </div>
-        <div class="gallery-item fade-in">
-          <div class="gallery-placeholder"
-            style="background:linear-gradient(135deg,#1a3a2a,#0d2a1a);aspect-ratio:16/9;"></div>
-          <div class="gallery-overlay"><span class="gallery-caption">Awards Ceremony — London</span></div>
+        <div class="step">
+          <div class="icon">⚙️</div>
+          <h3>Production</h3>
+          <p>Bringing the vision to life on-site.</p>
         </div>
-        <div class="gallery-item fade-in">
-          <div class="gallery-placeholder" style="background:linear-gradient(135deg,#3a2a10,#2a1a08);"></div>
-          <div class="gallery-overlay"><span class="gallery-caption">Product Launch — LA</span></div>
+        <div class="step">
+          <div class="icon">🎉</div>
+          <h3>Event Execution</h3>
+          <p>Managing the day to perfection.</p>
         </div>
-        <div class="gallery-item fade-in">
-          <div class="gallery-placeholder"
-            style="background:linear-gradient(135deg,#1a2040,#0d1428);aspect-ratio:16/9;"></div>
-          <div class="gallery-overlay"><span class="gallery-caption">Conference — Singapore</span></div>
-        </div>
-        <div class="gallery-item fade-in">
-          <div class="gallery-placeholder"
-            style="background:linear-gradient(135deg,#2a1010,#1a0808);aspect-ratio:16/9;"></div>
-          <div class="gallery-overlay"><span class="gallery-caption">Live Concert — Paris</span></div>
+        <div class="step">
+          <div class="icon">🥂</div>
+          <h3>Final Touches</h3>
+          <p>Ensuring a spectacular finale.</p>
         </div>
       </div>
-
     </div>
   </section>
+
+
+
 
   <!-- ═══════════════════════════════════════════
        CLIENTS
   ═══════════════════════════════════════════ -->
-  <section id="clients">
-    <div class="container">
-      <div class="fade-in">
-        <span class="section-title-line">Our Clients</span>
-        <h2 class="section-title">Brands That <em>Trust Us</em></h2>
-        <p class="section-desc">Hover each card to discover more of our brand partners.</p>
+  <section class="section">
+    <div class="section-title-line">OUR CLIENTS</div>
+    <h2 class="section-title">Brands That <em>Trust Us</em></h2>
+    <p class="subtitle">Hover to pause orbit · hover a brand to reveal</p>
+
+    <div class="orbit-scene" id="orbitScene">
+      <div class="ring ring-1"></div>
+      <div class="ring ring-2"></div>
+      <div class="ring ring-3"></div>
+      <div class="spinner spinner-1" id="spinner1"></div>
+      <div class="spinner spinner-2" id="spinner2"></div>
+      <div class="hub">
+        <img src="assets/logo.png" alt="Unicorn Events Logo" class="nav-logo-img" />
       </div>
     </div>
-    <div class="brand-grid"></div>
+
+    <div class="brand-strip" id="brandStrip"></div>
   </section>
 
-  <!-- Brand grid — populated entirely by brands.js -->
 
 
 
@@ -382,7 +394,7 @@
   </div>
 
   <!-- ── SCRIPTS ── -->
-  <script src="js/brands.js"></script>
+  <script src="js/brand_orbit.js"></script>
   <script src="js/components.js"></script>
   <script src="js/main.js"></script>
   <script src="js/admin.js"></script>
