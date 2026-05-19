@@ -276,23 +276,31 @@
   <!-- ═══════════════════════════════════════════
        CLIENTS
   ═══════════════════════════════════════════ -->
-  <section class="section">
+  <section id="clients" class="section">
     <div class="section-title-line">OUR CLIENTS</div>
     <h2 class="section-title">Brands That <em>Trust Us</em></h2>
     <p class="subtitle">Hover to pause orbit · hover a brand to reveal</p>
 
-    <div class="orbit-scene" id="orbitScene">
-      <div class="ring ring-1"></div>
-      <div class="ring ring-2"></div>
-      <div class="ring ring-3"></div>
-      <div class="spinner spinner-1" id="spinner1"></div>
-      <div class="spinner spinner-2" id="spinner2"></div>
+    <div class="orbit-scene" id="scene">
+      <div class="ring-decor ring-inner"></div>
+      <div class="ring-decor ring-outer"></div>
+      <div class="ring-decor ring-edge"></div>
+
       <div class="hub">
         <img src="assets/logo.png" alt="Unicorn Events Logo" class="nav-logo-img" />
       </div>
+
+      <!-- Tooltip lives inside scene so absolute positioning is relative to scene -->
+      <div class="tip" id="tip">
+        <div class="tip-logo-wrap" id="tipLogoWrap"></div>
+        <div class="tip-text">
+          <span class="tip-name" id="tipName"></span>
+          <span class="tip-cat" id="tipCat"></span>
+        </div>
+      </div>
     </div>
 
-    <div class="brand-strip" id="brandStrip"></div>
+    <div class="brand-strip" id="strip"></div>
   </section>
 
 

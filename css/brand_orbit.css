@@ -1,281 +1,208 @@
- @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Barlow:wght@300;400;500;600&display=swap');
+.orbit-scene {
+    position: relative;
+    width: 580px;
+    height: 580px;
+    margin: 0 auto 40px;
+}
 
+/* Static decorative rings */
+.ring-decor {
+    position: absolute;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
 
- /* ── Orbit Stage ── */
- .orbit-scene {
-     position: relative;
-     width: 560px;
-     height: 560px;
-     margin: 0 auto 40px;
- }
+.ring-inner {
+    width: 240px;
+    height: 240px;
+    border: 1px dashed rgba(240, 165, 0, 0.14);
+}
 
- /* dashed rings */
- .ring {
-     position: absolute;
-     border-radius: 50%;
-     border: 1px dashed rgba(255, 255, 255, 0.07);
-     top: 50%;
-     left: 50%;
-     transform: translate(-50%, -50%);
-     pointer-events: none;
- }
+.ring-outer {
+    width: 420px;
+    height: 420px;
+    border: 1px dashed rgba(255, 255, 255, 0.06);
+}
 
- .ring-1 {
-     width: 220px;
-     height: 220px;
-     border-color: rgba(240, 165, 0, 0.12);
- }
+.ring-edge {
+    width: 560px;
+    height: 560px;
+    border: 1px solid rgba(255, 255, 255, 0.025);
+    border-radius: 50%;
+}
 
- .ring-2 {
-     width: 380px;
-     height: 380px;
- }
+/* ── Nodes — position set entirely by JS, no CSS animation ── */
+.orbit-node {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: border-color 0.22s, background 0.22s, box-shadow 0.22s;
+    z-index: 5;
+    overflow: hidden;
+    /* IMPORTANT: no transform, no animation — JS handles position */
+}
 
- .ring-3 {
-     width: 520px;
-     height: 520px;
-     border-style: solid;
-     border-color: rgba(255, 255, 255, 0.03);
- }
+.orbit-node.hovered {
+    border-color: var(--gold);
+    background: #14172a;
+    box-shadow: 0 0 0 4px rgba(240, 165, 0, 0.12);
+    z-index: 20;
+}
 
- /* spinning containers */
- .spinner {
-     position: absolute;
-     top: 50%;
-     left: 50%;
-     transform: translate(-50%, -50%);
-     border-radius: 50%;
- }
+.orbit-node img {
+    width: 65%;
+    height: 65%;
+    object-fit: contain;
+    filter: grayscale(1) brightness(1.3);
+    transition: filter 0.22s;
+    pointer-events: none;
+    display: block;
+}
 
- .spinner-1 {
-     width: 220px;
-     height: 220px;
-     animation: spinCW 20s linear infinite;
- }
+.orbit-node.hovered img {
+    filter: grayscale(0) brightness(1);
+}
 
- .spinner-2 {
-     width: 380px;
-     height: 380px;
-     animation: spinCCW 30s linear infinite;
- }
+.fallback {
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    pointer-events: none;
+    transition: color 0.22s;
+}
 
- @keyframes spinCW {
-     from {
-         transform: translate(-50%, -50%) rotate(0deg);
-     }
+/* ── Hub ── */
+.hub {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 114px;
+    height: 114px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 2px solid var(--gold);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 15;
+    gap: 3px;
+}
 
-     to {
-         transform: translate(-50%, -50%) rotate(360deg);
-     }
- }
+.hub-count {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--gold);
+    line-height: 1;
+}
 
- @keyframes spinCCW {
-     from {
-         transform: translate(-50%, -50%) rotate(0deg);
-     }
+.hub-label {
+    font-size: 8px;
+    letter-spacing: 0.16em;
+    color: var(--text-muted);
+    font-weight: 500;
+}
 
-     to {
-         transform: translate(-50%, -50%) rotate(-360deg);
-     }
- }
+.hub::before {
+    content: '';
+    position: absolute;
+    width: 134px;
+    height: 134px;
+    border-radius: 50%;
+    border: 1px solid var(--gold-line);
+    animation: hubPulse 2.6s ease-out infinite;
+}
 
- .orbit-scene:hover .spinner-1,
- .orbit-scene:hover .spinner-2 {
-     animation-play-state: paused;
- }
+@keyframes hubPulse {
+    0% {
+        transform: scale(0.9);
+        opacity: 0.7;
+    }
 
- .orbit-scene:hover .orbit-node {
-     animation-play-state: paused;
- }
+    100% {
+        transform: scale(1.45);
+        opacity: 0;
+    }
+}
 
- /* nodes */
- .orbit-node {
-     position: absolute;
-     border-radius: 50%;
-     background: var(--card);
-     border: 1px solid var(--border);
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-     justify-content: center;
-     cursor: pointer;
-     transition: border-color 0.25s, background 0.25s, transform 0.25s;
-     text-decoration: none;
-     overflow: hidden;
- }
+/* ── Tooltip — floats above hovered node, positioned by JS ── */
+.tip {
+    position: absolute;
+    background: #0d0f1c;
+    border: 1px solid var(--gold-line);
+    border-radius: 10px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.18s;
+    z-index: 40;
+    transform: translateX(-50%) translateY(-100%);
+    margin-top: -10px;
+    white-space: nowrap;
+}
 
- .spinner-1 .orbit-node {
-     width: 58px;
-     height: 58px;
-     top: 50%;
-     left: 50%;
-     margin-top: -29px;
-     margin-left: -29px;
-     animation: spinCCW 20s linear infinite;
-     /* counter-rotate so logo stays upright */
- }
+.tip.visible {
+    opacity: 1;
+}
 
- .spinner-2 .orbit-node {
-     width: 64px;
-     height: 64px;
-     top: 50%;
-     left: 50%;
-     margin-top: -32px;
-     margin-left: -32px;
-     animation: spinCW 30s linear infinite;
- }
+.tip-logo-wrap {
+    width: 36px;
+    height: 36px;
+    background: #12141f;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+}
 
- .orbit-node:hover {
-     border-color: var(--gold);
-     background: #14172a;
-     transform: scale(1.18) !important;
-     z-index: 20;
- }
+.tip-logo-wrap img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+    display: block;
+}
 
- .orbit-node img {
-     width: 70%;
-     height: 70%;
-     object-fit: contain;
-     filter: grayscale(1) brightness(1.4);
-     transition: filter 0.25s;
- }
+.tip-logo-wrap .tip-fallback {
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+}
 
- .orbit-node:hover img {
-     filter: grayscale(0) brightness(1);
- }
+.tip-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
 
- .orbit-node .fallback {
-     font-size: 10px;
-     font-weight: 700;
-     line-height: 1;
-     text-align: center;
-     transition: color 0.25s;
- }
+.tip-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 0.06em;
+}
 
- /* center hub */
- .hub {
-     position: absolute;
-     top: 50%;
-     left: 50%;
-     transform: translate(-50%, -50%);
-     width: 110px;
-     height: 110px;
-     border-radius: 50%;
-     background: var(--card);
-     border: 2px solid var(--gold);
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-     justify-content: center;
-     z-index: 15;
-     gap: 3px;
- }
-
- .hub-count {
-     font-family: 'Cormorant Garamond', serif;
-     font-size: 30px;
-     font-weight: 600;
-     color: var(--gold);
-     line-height: 1;
- }
-
- .hub-text {
-     font-size: 8px;
-     letter-spacing: 0.16em;
-     color: var(--text-muted);
-     font-weight: 500;
-     text-transform: uppercase;
- }
-
- /* gold pulse ring on hub */
- .hub::before {
-     content: '';
-     position: absolute;
-     width: 130px;
-     height: 130px;
-     border-radius: 50%;
-     border: 1px solid var(--gold-line);
-     animation: hubPulse 2.5s ease-out infinite;
- }
-
- @keyframes hubPulse {
-     0% {
-         transform: scale(0.9);
-         opacity: 0.6;
-     }
-
-     100% {
-         transform: scale(1.4);
-         opacity: 0;
-     }
- }
-
- /* ── Tooltip ── */
- .tooltip {
-     position: absolute;
-     background: #0f111a;
-     border: 1px solid var(--gold-line);
-     border-radius: 8px;
-     padding: 7px 12px;
-     font-size: 11px;
-     color: var(--white);
-     white-space: nowrap;
-     pointer-events: none;
-     opacity: 0;
-     transform: translateY(6px);
-     transition: opacity 0.2s, transform 0.2s;
-     z-index: 30;
-     font-weight: 500;
-     letter-spacing: 0.06em;
- }
-
- .tooltip span {
-     display: block;
-     font-size: 9px;
-     color: var(--gold);
-     letter-spacing: 0.12em;
-     font-weight: 400;
-     margin-top: 1px;
- }
-
- .orbit-node:hover+.tooltip,
- .tooltip.show {
-     opacity: 1;
-     transform: translateY(0);
- }
-
- /* ── Brand strip at bottom ── */
- .brand-strip {
-     display: flex;
-     flex-wrap: wrap;
-     justify-content: center;
-     gap: 8px;
- }
-
- .brand-pill {
-     display: flex;
-     align-items: center;
-     gap: 7px;
-     background: var(--card);
-     border: 1px solid var(--border);
-     border-radius: 30px;
-     padding: 5px 12px 5px 8px;
-     font-size: 10px;
-     letter-spacing: 0.1em;
-     color: var(--text-muted);
-     font-weight: 500;
-     cursor: default;
-     transition: border-color 0.2s, color 0.2s;
- }
-
- .brand-pill:hover {
-     border-color: var(--gold-line);
-     color: var(--gold);
- }
-
- .brand-pill-dot {
-     width: 6px;
-     height: 6px;
-     border-radius: 50%;
-     flex-shrink: 0;
- }
+.tip-cat {
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 0.13em;
+    font-weight: 400;
+}

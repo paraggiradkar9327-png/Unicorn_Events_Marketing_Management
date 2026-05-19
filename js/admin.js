@@ -287,6 +287,5 @@
   });
 
   // Run after DOM is ready
-  document.addEventListener('DOMContentLoaded', renderBrandGrid);
 
 })();
