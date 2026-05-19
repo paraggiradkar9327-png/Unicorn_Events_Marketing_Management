@@ -15,7 +15,6 @@ const brands = [
     { name: 'Radiocity', short: 'RC', color: '#c8a84b', industry: 'Media & Entertainment', logo: './assets/brandIcon/radiocity-1.png' },
     { name: 'Rio', short: 'RIO', color: '#00a3e0', industry: 'Alcoholic Beverages', logo: './assets/brandIcon/rio-strong-logo.png' },
     { name: 'Seagrams', short: 'SEAGRAMS', color: '#cc0000', industry: 'Alcoholic Beverages', logo: './assets/brandIcon/seagrams-logo.png' },
-    { name: 'Tata', short: 'TATA', color: '#1a5fce', industry: 'Automotive', logo: './assets/brandIcon/tata-logo.png' },
     { name: 'Ultratech', short: 'UTECH', color: '#5b3ea6', industry: 'Textile', logo: './assets/brandIcon/ultratech-1.png' },
 ];
 
