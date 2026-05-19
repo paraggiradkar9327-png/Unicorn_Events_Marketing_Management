@@ -59,8 +59,8 @@
 }
 
 .orbit-node img {
-    width: 65%;
-    height: 65%;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
     filter: grayscale(1) brightness(1.3);
     transition: filter 0.22s;
