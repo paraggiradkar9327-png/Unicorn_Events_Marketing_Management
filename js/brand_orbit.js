@@ -15,19 +15,18 @@ const brands = [
     { name: 'Radiocity', short: 'RC', color: '#c8a84b', industry: 'Media & Entertainment', logo: './assets/brandIcon/radiocity-1.png' },
     { name: 'Rio', short: 'RIO', color: '#00a3e0', industry: 'Alcoholic Beverages', logo: './assets/brandIcon/rio-strong-logo.png' },
     { name: 'Seagrams', short: 'SEAGRAMS', color: '#cc0000', industry: 'Alcoholic Beverages', logo: './assets/brandIcon/seagrams-logo.png' },
-    { name: 'Ultratech', short: 'UTECH', color: '#5b3ea6', industry: 'Textile', logo: './assets/brandIcon/ultratech-1.png' },
 ];
 
 /* ═══════════════════════════════════════════
    LAYOUT CONFIG
 ═══════════════════════════════════════════ */
-const SCENE = 580;
+const SCENE = 720;
 const CX = SCENE / 2;
 const CY = SCENE / 2;
-const R1 = 118;
-const R2 = 208;
-const S1 = 58;
-const S2 = 64;
+const R1 = 150;
+const R2 = 265;
+const S1 = 80;
+const S2 = 90;
 const SPD1 = 0.30;
 const SPD2 = -0.18;
 
@@ -36,7 +35,7 @@ const SPD2 = -0.18;
 ═══════════════════════════════════════════ */
 const scene = document.getElementById('scene');
 const tip = document.getElementById('tip');
-const tipLogoWrap = document.getElementById('tipLogoWrap');
+// const tipLogoWrap = document.getElementById('tipLogoWrap');
 const tipName = document.getElementById('tipName');
 const tipCat = document.getElementById('tipCat');
 
@@ -97,28 +96,6 @@ const nodes = [
    or a text fallback for the given brand.
 ═══════════════════════════════════════════ */
 function setTipContent(brand) {
-    tipLogoWrap.innerHTML = '';
-
-    if (brand.logo) {
-        const img = document.createElement('img');
-        img.src = brand.logo;
-        img.alt = brand.name;
-        img.onerror = () => {
-            img.remove();
-            const fb = document.createElement('span');
-            fb.className = 'tip-fallback';
-            fb.textContent = brand.short;
-            fb.style.color = brand.color;
-            tipLogoWrap.appendChild(fb);
-        };
-        tipLogoWrap.appendChild(img);
-    } else {
-        const fb = document.createElement('span');
-        fb.className = 'tip-fallback';
-        fb.textContent = brand.short;
-        fb.style.color = brand.color;
-        tipLogoWrap.appendChild(fb);
-    }
 
     tipName.textContent = brand.name;
     tipCat.textContent = brand.industry;
