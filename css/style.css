@@ -283,6 +283,12 @@ img {
   justify-content: center;
   text-align: center;
   overflow: hidden;
+  cursor: pointer
+}
+
+#home a,
+#home button {
+  cursor: pointer;
 }
 
 .hero-video {
@@ -315,6 +321,12 @@ img {
   padding: 0 24px;
 }
 
+.hero-content,
+.hero-overlay,
+.scroll-hint {
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
 .hero-label {
   font-size: 0.65rem;
   letter-spacing: 0.3em;
@@ -322,6 +334,12 @@ img {
   color: var(--gold);
   margin-bottom: 24px;
   display: block;
+}
+
+.hero-hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 .hero-title {

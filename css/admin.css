@@ -373,3 +373,41 @@
     padding: 1rem 24px 0;
   }
 }
+
+/* ─── ADMIN TABS ─── */
+.admin-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: color 0.2s, border-color 0.2s;
+  margin-bottom: -1px;
+}
+
+.admin-tab.active {
+  color: #e6a817;
+  border-bottom-color: #e6a817;
+}
+
+.admin-tab:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ─── HERO FULLSCREEN CURSOR ─── */
+#hero-video,
+#hero-yt-wrap {
+  cursor: pointer;
+}

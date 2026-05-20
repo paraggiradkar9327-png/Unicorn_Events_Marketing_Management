@@ -31,19 +31,21 @@
   <section id="home">
     <div class="hero-fallback"></div>
 
-    <!--
-      HERO VIDEO
-      Replace the src with your own direct MP4 link or local file path.
-      Admin can also change this via the hidden admin panel (press ` three times).
-    -->
-    <video id="hero-video" class="hero-video" autoplay muted loop playsinline>
+    <video id="hero-video" class="hero-video" autoplay muted loop playsinline title="Click to fullscreen"
+      style="cursor:pointer">
       <source src="https://videos.pexels.com/video-files/3209828/3209828-uhd_2560_1440_25fps.mp4" type="video/mp4" />
     </video>
+
+    <!-- YouTube embed container (hidden by default) -->
+    <div id="hero-yt-wrap" style="display:none; position:absolute; inset:0; z-index:0;">
+      <iframe id="hero-yt-iframe" style="width:100%; height:100%; border:none; cursor:pointer;"
+        allow="autoplay; fullscreen" allowfullscreen frameborder="0">
+      </iframe>
+    </div>
 
     <div class="hero-overlay"></div>
 
     <div class="hero-content">
-
       <h1 class="hero-title">
         We Create<br>
         <em>Extraordinary</em><br>
@@ -54,7 +56,7 @@
         brand activations, and entertainment experiences for high-profile clientele.
       </p>
       <div class="hero-btns">
-        <a href="#events" class="btn btn-gold">Explore Our Work</a>
+        <a href="services.html#panel-events" class="btn btn-gold">Explore Our Work</a>
         <a href="contact.html" class="btn btn-outline">Get In Touch</a>
       </div>
     </div>
@@ -369,12 +371,15 @@
   <div data-component="footer"></div>
 
   <!-- ── ADMIN PANEL ── -->
+  <!-- ── ADMIN PANEL ── -->
   <button id="admin-trigger-btn" aria-label="Admin Panel">Admin</button>
   <div id="admin-overlay" role="dialog" aria-modal="true" aria-label="Admin Panel">
     <div id="admin-modal">
       <button id="admin-close" aria-label="Close">&times;</button>
       <div class="admin-logo">Unicorn Events</div>
       <div class="admin-subtitle">Admin Panel</div>
+
+      <!-- STEP 1: PASSWORD -->
       <div id="admin-step-password">
         <label class="admin-label" for="admin-password-input">Enter Admin Password</label>
         <input class="admin-input" type="password" id="admin-password-input" placeholder="Password"
@@ -382,22 +387,43 @@
         <span class="admin-error" id="admin-password-error"></span>
         <button class="admin-btn" id="admin-password-btn">Verify Access</button>
       </div>
+
+      <!-- STEP 2: UPLOAD (shown after password) -->
       <div id="admin-step-upload">
-        <label class="admin-label">Upload New Hero Video</label>
-        <div class="upload-zone" id="upload-drop-zone">
-          <input type="file" id="video-file-input" accept="video/mp4,video/webm,video/*" />
-          <div class="upload-icon">&#9654;</div>
-          <p><strong>Click to select or drag &amp; drop</strong> MP4, WebM — any size</p>
+
+        <!-- TABS -->
+        <div class="admin-tabs">
+          <button class="admin-tab active" id="tab-file" onclick="switchAdminTab('file')">Upload File</button>
+          <button class="admin-tab" id="tab-yt" onclick="switchAdminTab('yt')">YouTube Link</button>
         </div>
-        <span class="upload-filename" id="upload-filename"></span>
-        <div class="upload-progress" id="upload-progress">
-          <div class="upload-progress-bar" id="upload-progress-bar"></div>
+
+        <!-- FILE UPLOAD PANEL -->
+        <div id="tab-panel-file">
+          <div class="upload-zone" id="upload-drop-zone">
+            <input type="file" id="video-file-input" accept="video/mp4,video/webm,video/*" />
+            <div class="upload-icon">&#9654;</div>
+            <p><strong>Click to select or drag &amp; drop</strong> MP4, WebM — any size</p>
+          </div>
+          <span class="upload-filename" id="upload-filename"></span>
+          <div class="upload-progress" id="upload-progress">
+            <div class="upload-progress-bar" id="upload-progress-bar"></div>
+          </div>
+          <div class="upload-success" id="upload-success">Video uploaded successfully. The homepage background has been
+            updated.</div>
+          <button class="admin-btn" id="upload-submit-btn" disabled>Upload Video</button>
         </div>
-        <div class="upload-success" id="upload-success">Video uploaded successfully. The homepage background has been
-          updated.</div>
-        <button class="admin-btn" id="upload-submit-btn" disabled>Upload Video</button>
+
+        <!-- YOUTUBE PANEL -->
+        <div id="tab-panel-yt" style="display:none;">
+          <label class="admin-label" for="yt-url-input">YouTube Video URL</label>
+          <input class="admin-input" id="yt-url-input" type="url" placeholder="https://www.youtube.com/watch?v=..." />
+          <span class="admin-error" id="yt-url-error"></span>
+          <button class="admin-btn" id="yt-submit-btn">Set YouTube Video</button>
+        </div>
+
         <p class="admin-hint">The video is saved in your browser and will persist across page refreshes.</p>
       </div>
+
     </div>
   </div>
 
