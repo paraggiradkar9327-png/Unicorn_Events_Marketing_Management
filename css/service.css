@@ -814,6 +814,88 @@
   }
 }
 
+/* ── MOBILE PANEL VISUAL FIX ── */
+@media (max-width: 768px) {
+
+  /* Stack layout vertically: text on top, image below */
+  .panel-visual {
+    height: auto;
+    min-height: unset;
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  /* Background layer — only covers the text portion */
+  .panel-visual-bg {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    z-index: 0;
+  }
+
+  /* Dark overlay only behind the text block */
+  .panel-visual::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: rgba(10, 15, 24, 0.72);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* Text block — natural height, sits above overlay */
+  .panel-visual-content {
+    position: relative;
+    z-index: 2;
+    height: auto;
+    padding: 48px 24px 36px;
+    max-width: 100%;
+    justify-content: flex-start;
+  }
+
+  .panel-title {
+    font-size: clamp(1.8rem, 7vw, 2.6rem);
+    margin-bottom: 14px;
+  }
+
+  .panel-desc {
+    font-size: 0.84rem;
+    line-height: 1.75;
+    margin-bottom: 24px;
+    max-width: 100%;
+  }
+
+  .panel-cta {
+    width: auto;
+    font-size: 0.62rem;
+  }
+
+  /* Pull image out of absolute and place it below text */
+  .panel-visual-accent-1 {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 220px;
+    top: auto;
+    right: auto;
+    border-radius: 0;
+    border: none;
+    border-top: 1px solid rgba(230, 168, 23, 0.15);
+    flex-shrink: 0;
+  }
+
+  .panel-visual-accent-1 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0;
+  }
+}
+
 @media (max-width: 768px) {
   .service-tabs {
     overflow-x: auto;
@@ -832,7 +914,7 @@
   }
 
   .panel-visual-content {
-    padding: 100px 24px 140px;
+    padding: 100px 24px 80x;
   }
 
   .panel-stats {
@@ -869,7 +951,7 @@
   }
 
   .panel-section {
-    padding: 60px 24px;
+    padding: 0px 24px;
   }
 
   .panel-section-alt {

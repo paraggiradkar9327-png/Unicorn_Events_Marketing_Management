@@ -353,12 +353,47 @@
     initDragDrop();
   }
 
+  // ─── WATCH FULL VIDEO CURSOR ─────────────────────────────
+  function initWatchCursor() {
+    const cursor = document.getElementById('watch-cursor');
+    const heroSection = document.getElementById('home');
+    const heroVideo = document.getElementById('hero-video');
+    if (!cursor || !heroSection) return;
+
+    let rafId = null;
+    let mouseX = 0, mouseY = 0;
+
+    function moveCursor(e) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (!rafId) {
+        rafId = requestAnimationFrame(() => {
+          cursor.style.left = mouseX + 'px';
+          cursor.style.top = mouseY + 'px';
+          rafId = null;
+        });
+      }
+    }
+
+    heroSection.addEventListener('mouseenter', () => cursor.classList.add('visible'));
+    heroSection.addEventListener('mouseleave', () => cursor.classList.remove('visible'));
+    heroSection.addEventListener('mousemove', moveCursor);
+
+    if (heroVideo) {
+      heroVideo.addEventListener('click', () => {
+        if (heroVideo.requestFullscreen) heroVideo.requestFullscreen();
+        else if (heroVideo.webkitRequestFullscreen) heroVideo.webkitRequestFullscreen();
+      });
+    }
+  }
+
   // ─── INIT ─────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
     loadSavedVideo();
     initSecretTrigger();
     initEvents();
     initVideoFullscreen();
+    initWatchCursor();
   });
 
 })();

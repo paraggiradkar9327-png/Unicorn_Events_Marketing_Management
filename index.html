@@ -31,8 +31,7 @@
   <section id="home">
     <div class="hero-fallback"></div>
 
-    <video id="hero-video" class="hero-video" autoplay muted loop playsinline title="Click to fullscreen"
-      style="cursor:pointer">
+    <video id="hero-video" class="hero-video" autoplay muted loop playsinline title="Click to fullscreen">
       <source src="https://videos.pexels.com/video-files/3209828/3209828-uhd_2560_1440_25fps.mp4" type="video/mp4" />
     </video>
 
@@ -62,6 +61,20 @@
     </div>
 
     <div class="scroll-hint">Scroll</div>
+    <!-- Custom "WATCH FULL VIDEO" cursor -->
+    <div id="watch-cursor" class="watch-cursor" aria-hidden="true">
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <path id="watch-circle-path" d="M 60,60 m -38,0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0" />
+        </defs>
+        <circle cx="60" cy="60" r="50" fill="none" stroke="white" stroke-width="1.2" opacity="0.9" />
+        <text class="watch-text" fill="white" font-size="10.5" letter-spacing="3.2" font-family="Inter, sans-serif"
+          font-weight="500">
+          <textPath href="#watch-circle-path" startOffset="0%">WATCH FULL VIDEO • WATCH FULL VIDEO •</textPath>
+        </text>
+        <polygon class="watch-play" points="52,44 52,76 80,60" fill="white" />
+      </svg>
+    </div>
   </section>
 
   <!-- ═══════════════════════════════════════════
@@ -227,14 +240,13 @@
 
 
   <!-- ═══════════════════════════════════════════
-       GALLERY
+       Our Process
   ═══════════════════════════════════════════ -->
   <section id="process">
     <div class="container fade-in">
       <div class="process-header">
         <div>
-          <span class=" section-title-line">Our Process</span>
-
+          <span class="section-title-line">Our Process</span>
         </div>
         <h2 class="section-title">Event Planning <em>Journey</em></h2>
         <p class="section-desc">
@@ -248,21 +260,33 @@
           <h3>Concept & Vision</h3>
           <p>Understanding your goals and ideas.</p>
         </div>
+
+        <div class="step-connector"></div>
+
         <div class="step">
           <div class="icon">📝</div>
           <h3>Design & Planning</h3>
           <p>Crafting a unique and detailed plan.</p>
         </div>
+
+        <div class="step-connector"></div>
+
         <div class="step">
           <div class="icon">⚙️</div>
           <h3>Production</h3>
           <p>Bringing the vision to life on-site.</p>
         </div>
+
+        <div class="step-connector"></div>
+
         <div class="step">
           <div class="icon">🎉</div>
           <h3>Event Execution</h3>
           <p>Managing the day to perfection.</p>
         </div>
+
+        <div class="step-connector"></div>
+
         <div class="step">
           <div class="icon">🥂</div>
           <h3>Final Touches</h3>

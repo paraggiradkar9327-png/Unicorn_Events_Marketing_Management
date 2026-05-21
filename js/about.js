@@ -130,16 +130,29 @@
 
     /* ── SLIDE ── */
 
+
     function slideToStep(i) {
         var rail = document.getElementById('hwa-rail-wrap');
         var track = document.getElementById('hwa-cards-track');
         if (!rail || !track) return;
-        var gap = 18;
-        var w = rail.offsetWidth;
-        var vis = window.innerWidth <= 768 ? 1 : (window.innerWidth <= 1024 ? 2 : 3);
-        var cw = (w - gap * (vis - 1)) / vis;
+
+        var isMobile = window.innerWidth <= 768;
+        var isTablet = window.innerWidth <= 1024;
+        var vis = isMobile ? 1 : (isTablet ? 2 : 3);
+        var gap = isMobile ? 0 : 18;
+        var style = window.getComputedStyle(rail);
+        var w = rail.offsetWidth
+            - parseFloat(style.paddingLeft)
+            - parseFloat(style.paddingRight);
+        var cw = isMobile ? w : (w - gap * (vis - 1)) / vis;
         var max = STEPS.length - vis;
-        var off = Math.max(0, Math.min(i, max));
+
+        // On mobile: slide by exact card width (no gap)
+        // On desktop: centre the active card in the visible window
+        var off = isMobile
+            ? i
+            : Math.max(0, Math.min(i - Math.floor(vis / 2), max));
+
         track.style.transform = 'translateX(-' + (off * (cw + gap)) + 'px)';
     }
 

@@ -350,6 +350,10 @@
   color: var(--fg2);
 }
 
+.step-connector {
+  display: none;
+}
+
 
 
 /* ─── RESPONSIVE ───────────────────────────────────────────── */
@@ -410,4 +414,55 @@
 #hero-video,
 #hero-yt-wrap {
   cursor: pointer;
+}
+
+/* ── MOBILE: vertical stack ── */
+@media (max-width: 768px) {
+  #process {
+    padding: 60px 20px;
+  }
+
+  .timeline {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* Hide horizontal golden line */
+  .timeline::before {
+    display: none;
+  }
+
+  .step {
+    width: 80%;
+    max-width: 400px;
+    flex: none;
+    padding: 22px 20px;
+
+  }
+
+  .step:hover {
+    transform: none;
+  }
+
+  /* Vertical golden connector with downward arrow */
+  .step-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 2px;
+    height: 44px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .step-connector::before {
+    content: '';
+    display: block;
+    width: 2px;
+    height: 36px;
+    background: rgba(230, 168, 23, 0.35);
+  }
+
+
 }
