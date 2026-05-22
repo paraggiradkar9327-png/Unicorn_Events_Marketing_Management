@@ -1,0 +1,801 @@
+abash
+
+cat > /mnt/user-data/outputs/portfolio-clean.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio — Unicorn Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #0d1117;
+      --bg2:    #111820;
+      --bg3:    #161e28;
+      --fg:     #ede8df;
+      --fg2:    #a09888;
+      --gold:   #e6a817;
+      --gold2:  #c48f10;
+      --border: rgba(255,255,255,0.08);
+      --serif:  'Playfair Display', serif;
+      --sans:   'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    img { display: block; width: 100%; }
+
+    /* ════════════════════════════
+       SECTION
+    ════════════════════════════ */
+    #portfolio {
+      padding: 100px 0 80px;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    /* ════════════════════════════
+       HEADER
+    ════════════════════════════ */
+    .section-title-line {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      color: #d4a017;
+      font-size: 12px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+    .section-title-line::before {
+      content: "";
+      width: 35px;
+      height: 1px;
+      background: #d4a017;
+      display: block;
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .section-title em { font-style: italic; color: var(--gold); }
+
+    .section-desc {
+      color: var(--fg2);
+      max-width: 520px;
+      font-size: 0.95rem;
+      line-height: 1.85;
+      margin-bottom: 48px;
+    }
+
+    /* ════════════════════════════
+       FILTER TABS
+    ════════════════════════════ */
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      margin-bottom: 36px;
+      border: 1px solid var(--border);
+      width: fit-content;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: none;
+      border-right: 1px solid var(--border);
+      color: var(--fg2);
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 13px 28px;
+      cursor: pointer;
+      transition: color 0.3s, background 0.3s;
+      white-space: nowrap;
+    }
+    .filter-btn:last-child { border-right: none; }
+    .filter-btn:hover { color: var(--fg); background: rgba(255,255,255,0.03); }
+    .filter-btn.active {
+      background: var(--gold);
+      color: var(--bg);
+      font-weight: 600;
+    }
+
+    /* ════════════════════════════
+       MASONRY GRID
+    ════════════════════════════ */
+    .pf-grid {
+      columns: 4;
+      column-gap: 10px;
+    }
+
+    /* ════════════════════════════
+       CARD
+    ════════════════════════════ */
+    .pf-card {
+      break-inside: avoid;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 10px;
+      cursor: pointer;
+      background: var(--bg3);
+      display: block;
+    }
+
+    .pf-card img {
+      width: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s cubic-bezier(.25,.46,.45,.94),
+                  filter 0.5s ease;
+      filter: brightness(0.82);
+    }
+
+    .pf-card:hover img {
+      transform: scale(1.05);
+      filter: brightness(0.55);
+    }
+
+    /* Bottom gradient */
+    .pf-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(10,12,18,0.92) 0%,
+        rgba(10,12,18,0.2) 45%,
+        transparent 70%
+      );
+      z-index: 1;
+    }
+
+    /* Info block */
+    .pf-card-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      z-index: 2;
+      padding: 16px 18px 18px;
+    }
+
+    .pf-card-cat {
+      font-size: 0.58rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 3px;
+      opacity: 0;
+      transform: translateY(5px);
+      transition: opacity 0.3s ease 0.04s, transform 0.3s ease 0.04s;
+    }
+
+    .pf-card-title {
+      font-family: var(--serif);
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--fg);
+      line-height: 1.25;
+      opacity: 0;
+      transform: translateY(5px);
+      transition: opacity 0.3s ease 0.08s, transform 0.3s ease 0.08s;
+    }
+
+    .pf-card:hover .pf-card-cat,
+    .pf-card:hover .pf-card-title {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Arrow on hover */
+    .pf-card-arrow {
+      position: absolute;
+      top: 14px; right: 14px;
+      z-index: 3;
+      width: 34px; height: 34px;
+      border: 1px solid rgba(230,168,23,0.5);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold);
+      font-size: 14px;
+      opacity: 0;
+      transform: scale(0.7) rotate(-45deg);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .pf-card:hover .pf-card-arrow {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+
+    /* Hidden when filtered */
+    .pf-card.hidden { display: none; }
+
+    /* ════════════════════════════
+       LIGHTBOX
+    ════════════════════════════ */
+    .lb {
+      position: fixed; inset: 0; z-index: 9000;
+      background: rgba(7,9,13,0.97);
+      backdrop-filter: blur(16px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    .lb.open { opacity: 1; pointer-events: all; }
+
+    .lb-wrap {
+      position: relative;
+      max-width: 1000px;
+      width: 88vw;
+    }
+
+    .lb-img {
+      width: 100%;
+      max-height: 74vh;
+      object-fit: contain;
+      display: block;
+    }
+
+    .lb-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-top: 16px;
+    }
+
+    .lb-cat {
+      font-size: 0.58rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 5px;
+    }
+    .lb-title {
+      font-family: var(--serif);
+      font-size: 1.45rem;
+      font-weight: 600;
+      color: var(--fg);
+    }
+
+    .lb-close {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--fg2);
+      font-size: 20px;
+      width: 46px; height: 46px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s;
+      flex-shrink: 0;
+    }
+    .lb-close:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+
+    .lb-nav {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      font-size: 22px;
+      width: 46px; height: 46px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s;
+    }
+    .lb-nav:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+    .lb-prev { left: -58px; }
+    .lb-next { right: -58px; }
+
+    /* ════════════════════════════
+       STATS
+    ════════════════════════════ */
+    .pf-stats {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border: 1px solid var(--border);
+      margin-top: 60px;
+    }
+    .pf-stat {
+      padding: 28px 24px;
+      border-right: 1px solid var(--border);
+    }
+    .pf-stat:last-child { border-right: none; }
+    .pf-stat-num {
+      font-family: var(--serif);
+      font-size: 2.4rem;
+      font-weight: 600;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .pf-stat-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--fg2);
+      font-weight: 500;
+    }
+
+    /* ════════════════════════════
+       FADE IN
+    ════════════════════════════ */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: none; }
+
+    /* ════════════════════════════
+       RESPONSIVE
+    ════════════════════════════ */
+    @media (max-width: 1100px) {
+      .pf-grid { columns: 3; }
+    }
+    @media (max-width: 768px) {
+      #portfolio { padding: 72px 0 60px; }
+      .container { padding: 0 20px; }
+      .pf-grid { columns: 2; }
+      .filter-row { width: 100%; }
+      .filter-btn { flex: 1; text-align: center; padding: 12px 10px; font-size: 0.6rem; }
+      .pf-stats { grid-template-columns: repeat(3, 1fr); }
+      .pf-stat:nth-child(4), .pf-stat:nth-child(5) { border-top: 1px solid var(--border); }
+      .lb-prev { left: -6px; }
+      .lb-next { right: -6px; }
+    }
+    @media (max-width: 480px) {
+      .pf-grid { columns: 1; }
+      .pf-stats { grid-template-columns: 1fr 1fr; }
+      .pf-stat:nth-child(5) { grid-column: span 2; }
+    }
+  </style>
+</head>
+<body>
+
+<section id="portfolio">
+  <div class="container">
+
+    <!-- HEADER -->
+    <span class="section-title-line fade-in">Our Portfolio</span>
+    <h2 class="section-title fade-in">Work That Speaks <em>For Itself</em></h2>
+    <p class="section-desc fade-in">
+      Every image is a story of precision, creativity, and passion.
+      Filter by category to explore our world.
+    </p>
+
+    <!-- FILTERS -->
+    <div class="filter-row fade-in">
+      <button class="filter-btn active" data-filter="all">All Work</button>
+      <button class="filter-btn" data-filter="events">Events</button>
+      <button class="filter-btn" data-filter="activation">Activation</button>
+      <button class="filter-btn" data-filter="branding">Branding</button>
+      <button class="filter-btn" data-filter="wedding">Wedding</button>
+      <button class="filter-btn" data-filter="sports">Sports</button>
+    </div>
+
+    <!-- GRID -->
+    <!--
+      HOW TO ADD PHOTOS:
+      Copy any .pf-card block below and replace:
+        data-cat="events"         → events / activation / branding / wedding / sports
+        data-title="Your Title"   → project name shown in lightbox
+        src="assets/your-img.jpg" → path to your image
+      The masonry layout adjusts automatically.
+    -->
+    <div class="pf-grid fade-in" id="pfGrid">
+
+      <!-- ── EVENTS ── -->
+      <div class="pf-card" data-cat="events" data-title="Grand Corporate Gala" onclick="openLB(this)">
+        <img src="assets/event-port-img-1.webp" alt="Grand Corporate Gala">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Events</div>
+          <div class="pf-card-title">Grand Corporate Gala</div>
+        </div>
+      </div>
+
+      <div class="pf-card" data-cat="events" data-title="Annual Awards Night" onclick="openLB(this)">
+        <img src="assets/event-port-img-1.webp" alt="Annual Awards Night">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Events</div>
+          <div class="pf-card-title">Annual Awards Night</div>
+        </div>
+      </div>
+
+      <div class="pf-card" data-cat="events" data-title="Product Launch" onclick="openLB(this)">
+        <img src="assets/event-port-img-1.webp" alt="Product Launch">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Events</div>
+          <div class="pf-card-title">Product Launch</div>
+        </div>
+      </div>
+
+      <div class="pf-card" data-cat="events" data-title="Leadership Summit" onclick="openLB(this)">
+        <img src="assets/event-port-img-1.webp" alt="Leadership Summit">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Events</div>
+          <div class="pf-card-title">Leadership Summit</div>
+        </div>
+      </div>
+
+      <div class="pf-card" data-cat="events" data-title="Cultural Festival" onclick="openLB(this)">
+        <img src="assets/event-port-img-1.webp" alt="Cultural Festival">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Events</div>
+          <div class="pf-card-title">Cultural Festival</div>
+        </div>
+      </div>
+
+      <div class="pf-card" data-cat="events" data-title="Gala Dinner" onclick="openLB(this)">
+        <img src="assets/event-port-img-1.webp" alt="Gala Dinner">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Events</div>
+          <div class="pf-card-title">Gala Dinner</div>
+        </div>
+      </div>
+
+      <!-- ── ACTIVATION ── -->
+      <div class="pf-card" data-cat="activation" data-title="Brand Activation Drive" onclick="openLB(this)">
+        <img src="assets/activation-port-1.webp" alt="Brand Activation Drive">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Activation</div>
+          <div class="pf-card-title">Brand Activation Drive</div>
+        </div>
+      </div>
+
+      <div class="pf-card" data-cat="activation" data-title="On-Ground Campaign" onclick="openLB(this)">
+        <img src="assets/activation-port-1.webp" alt="On-Ground Campaign">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Activation</div>
+          <div class="pf-card-title">On-Ground Campaign</div>
+        </div>
+      </div>
+
+      <div class="pf-card" data-cat="activation" data-title="Road Show" onclick="openLB(this)">
+        <img src="assets/activation-port-1.webp" alt="Road Show">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Activation</div>
+          <div class="pf-card-title">Road Show</div>
+        </div>
+      </div>
+
+      <div class="pf-card" data-cat="activation" data-title="Retail Engagement" onclick="openLB(this)">
+        <img src="assets/activation-port-1.webp" alt="Retail Engagement">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Activation</div>
+          <div class="pf-card-title">Retail Engagement</div>
+        </div>
+      </div>
+
+      <div class="pf-card" data-cat="activation" data-title="Consumer Connect" onclick="openLB(this)">
+        <img src="assets/activation-port-1.webp" alt="Consumer Connect">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Activation</div>
+          <div class="pf-card-title">Consumer Connect</div>
+        </div>
+      </div>
+
+      <!-- ── BRANDING ── -->
+      <div class="pf-card" data-cat="branding" data-title="Corporate Identity Campaign" onclick="openLB(this)">
+        <img src="assets/branding-port-2.webp" alt="Corporate Identity Campaign">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Branding</div>
+          <div class="pf-card-title">Corporate Identity Campaign</div>
+        </div>
+      </div>
+
+      <div class="pf-card" data-cat="branding" data-title="OOH Campaign" onclick="openLB(this)">
+        <img src="assets/branding-port-2.webp" alt="OOH Campaign">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Branding</div>
+          <div class="pf-card-title">OOH Campaign</div>
+        </div>
+      </div>
+
+      <div class="pf-card" data-cat="branding" data-title="Digital Brand Strategy" onclick="openLB(this)">
+        <img src="assets/branding-port-2.webp" alt="Digital Brand Strategy">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Branding</div>
+          <div class="pf-card-title">Digital Brand Strategy</div>
+        </div>
+      </div>
+
+      <div class="pf-card" data-cat="branding" data-title="Visual Identity" onclick="openLB(this)">
+        <img src="assets/branding-port-2.webp" alt="Visual Identity">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Branding</div>
+          <div class="pf-card-title">Visual Identity</div>
+        </div>
+      </div>
+
+      <!-- ── WEDDING ── -->
+      <div class="pf-card" data-cat="wedding" data-title="Royal Destination Wedding" onclick="openLB(this)">
+        <img src="assets/wedding-port-8.webp" alt="Royal Destination Wedding">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Wedding</div>
+          <div class="pf-card-title">Royal Destination Wedding</div>
+        </div>
+      </div>
+
+      <div class="pf-card" data-cat="wedding" data-title="Sangeet Night" onclick="openLB(this)">
+        <img src="assets/wedding-port-8.webp" alt="Sangeet Night">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Wedding</div>
+          <div class="pf-card-title">Sangeet Night</div>
+        </div>
+      </div>
+
+      <div class="pf-card" data-cat="wedding" data-title="Grand Reception" onclick="openLB(this)">
+        <img src="assets/wedding-port-8.webp" alt="Grand Reception">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Wedding</div>
+          <div class="pf-card-title">Grand Reception</div>
+        </div>
+      </div>
+
+      <div class="pf-card" data-cat="wedding" data-title="Mehendi Ceremony" onclick="openLB(this)">
+        <img src="assets/wedding-port-8.webp" alt="Mehendi Ceremony">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Wedding</div>
+          <div class="pf-card-title">Mehendi Ceremony</div>
+        </div>
+      </div>
+
+      <div class="pf-card" data-cat="wedding" data-title="Baraat Procession" onclick="openLB(this)">
+        <img src="assets/wedding-port-8.webp" alt="Baraat Procession">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Wedding</div>
+          <div class="pf-card-title">Baraat Procession</div>
+        </div>
+      </div>
+
+      <div class="pf-card" data-cat="wedding" data-title="Wedding Decor" onclick="openLB(this)">
+        <img src="assets/wedding-port-8.webp" alt="Wedding Decor">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Wedding</div>
+          <div class="pf-card-title">Wedding Decor</div>
+        </div>
+      </div>
+
+      <!-- ── SPORTS ── -->
+      <div class="pf-card" data-cat="sports" data-title="City Sports Championship" onclick="openLB(this)">
+        <img src="assets/event-port-img-1.webp" alt="City Sports Championship">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Sports</div>
+          <div class="pf-card-title">City Sports Championship</div>
+        </div>
+      </div>
+
+      <div class="pf-card" data-cat="sports" data-title="Annual Marathon" onclick="openLB(this)">
+        <img src="assets/event-port-img-1.webp" alt="Annual Marathon">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Sports</div>
+          <div class="pf-card-title">Annual Marathon</div>
+        </div>
+      </div>
+
+      <div class="pf-card" data-cat="sports" data-title="Premier League Tournament" onclick="openLB(this)">
+        <img src="assets/event-port-img-1.webp" alt="Premier League Tournament">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Sports</div>
+          <div class="pf-card-title">Premier League Tournament</div>
+        </div>
+      </div>
+
+      <div class="pf-card" data-cat="sports" data-title="Corporate Sports Day" onclick="openLB(this)">
+        <img src="assets/event-port-img-1.webp" alt="Corporate Sports Day">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Sports</div>
+          <div class="pf-card-title">Corporate Sports Day</div>
+        </div>
+      </div>
+
+      <div class="pf-card" data-cat="sports" data-title="Kabaddi League" onclick="openLB(this)">
+        <img src="assets/event-port-img-1.webp" alt="Kabaddi League">
+        <div class="pf-card-overlay"></div>
+        <div class="pf-card-arrow">↗</div>
+        <div class="pf-card-info">
+          <div class="pf-card-cat">Sports</div>
+          <div class="pf-card-title">Kabaddi League</div>
+        </div>
+      </div>
+
+    </div>
+    <!-- /grid -->
+
+    <!-- STATS -->
+    <div class="pf-stats fade-in">
+      <div class="pf-stat">
+        <div class="pf-stat-num" data-count="200">200+</div>
+        <div class="pf-stat-label">Events</div>
+      </div>
+      <div class="pf-stat">
+        <div class="pf-stat-num" data-count="150">150+</div>
+        <div class="pf-stat-label">Activations</div>
+      </div>
+      <div class="pf-stat">
+        <div class="pf-stat-num" data-count="80">80+</div>
+        <div class="pf-stat-label">Branding Projects</div>
+      </div>
+      <div class="pf-stat">
+        <div class="pf-stat-num" data-count="120">120+</div>
+        <div class="pf-stat-label">Weddings</div>
+      </div>
+      <div class="pf-stat">
+        <div class="pf-stat-num" data-count="60">60+</div>
+        <div class="pf-stat-label">Sports Events</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb" onclick="closeLBBg(event)">
+  <div class="lb-wrap">
+    <button class="lb-nav lb-prev" onclick="lbNav(-1)">&#8249;</button>
+    <button class="lb-nav lb-next" onclick="lbNav(1)">&#8250;</button>
+    <img class="lb-img" id="lbImg" src="" alt="">
+    <div class="lb-bar">
+      <div>
+        <div class="lb-cat" id="lbCat"></div>
+        <div class="lb-title" id="lbTitle"></div>
+      </div>
+      <button class="lb-close" onclick="document.getElementById('lb').classList.remove('open')">&#x2715;</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ── Filter ── */
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const allCards   = document.querySelectorAll('.pf-card');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      allCards.forEach(card => {
+        card.classList.toggle('hidden', f !== 'all' && card.dataset.cat !== f);
+      });
+    });
+  });
+
+  /* ── Lightbox ── */
+  let currentIdx  = 0;
+  let visibleList = [];
+
+  function openLB(el) {
+    visibleList = [...allCards].filter(c => !c.classList.contains('hidden'));
+    currentIdx  = visibleList.indexOf(el);
+    showCard(visibleList[currentIdx]);
+    document.getElementById('lb').classList.add('open');
+  }
+
+  function showCard(card) {
+    const imgEl = card.querySelector('img');
+    document.getElementById('lbImg').src         = imgEl ? imgEl.src : '';
+    document.getElementById('lbCat').textContent  = card.dataset.cat.toUpperCase();
+    document.getElementById('lbTitle').textContent = card.dataset.title;
+  }
+
+  function lbNav(dir) {
+    currentIdx = (currentIdx + dir + visibleList.length) % visibleList.length;
+    showCard(visibleList[currentIdx]);
+  }
+
+  function closeLBBg(e) {
+    if (e.target === document.getElementById('lb'))
+      document.getElementById('lb').classList.remove('open');
+  }
+
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lb').classList.contains('open')) return;
+    if (e.key === 'Escape')      document.getElementById('lb').classList.remove('open');
+    if (e.key === 'ArrowLeft')   lbNav(-1);
+    if (e.key === 'ArrowRight')  lbNav(1);
+  });
+
+  /* ── Count-up ── */
+  const counters = document.querySelectorAll('.pf-stat-num[data-count]');
+  const cio = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target, target = +el.dataset.count;
+      let n = 0;
+      const tick = () => {
+        n += target / 55;
+        if (n >= target) { el.textContent = target + '+'; return; }
+        el.textContent = Math.floor(n) + '+';
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+      cio.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  counters.forEach(c => cio.observe(c));
+
+  /* ── Fade-in ── */
+  const fades = document.querySelectorAll('.fade-in');
+  const fio = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (!e.isIntersecting) return;
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      fio.unobserve(e.target);
+    });
+  }, { threshold: 0.1 });
+  fades.forEach(el => fio.observe(el));
+</script>
+</body>
+</html>
