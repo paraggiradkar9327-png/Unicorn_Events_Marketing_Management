@@ -1,67 +1,68 @@
+/* ── Services Dropdown (kept for compatibility if referenced elsewhere) ── */
+/* Services section removed from form — no services dropdown logic needed */
 
-/* ── Services Dropdown ── */
-const trigger = document.getElementById('servicesTrigger');
-const dropdown = document.getElementById('servicesDropdown');
-const chevron = document.getElementById('servicesChevron');
-const trigText = document.getElementById('servicesTriggerText');
-const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]');
+/* ── Types of Events Dropdown ── */
+const eventsTrigger = document.getElementById('eventsTrigger');
+const eventsDropdown = document.getElementById('eventsDropdown');
+const eventsChevron = document.getElementById('eventsChevron');
+const eventsTriggerText = document.getElementById('eventsTriggerText');
+const eventsCheckboxes = eventsDropdown.querySelectorAll('input[type="checkbox"]');
+const eventOtherCheckbox = document.getElementById('eventOtherCheckbox');
+const eventOtherField = document.getElementById('eventOtherField');
 
-function updateTriggerText() {
-    const selected = [...checkboxes].filter(c => c.checked).map(c => c.value);
+function updateEventsTriggerText() {
+    const selected = [...eventsCheckboxes].filter(c => c.checked).map(c => c.value);
     if (selected.length === 0) {
-        trigText.textContent = 'Choose services…';
-        trigText.classList.remove('has-value');
+        eventsTriggerText.textContent = 'Choose event types…';
+        eventsTriggerText.classList.remove('has-value');
     } else {
-        trigText.textContent = selected.join(', ');
-        trigText.classList.add('has-value');
+        eventsTriggerText.textContent = selected.join(', ');
+        eventsTriggerText.classList.add('has-value');
     }
 }
 
-trigger.addEventListener('click', () => {
-    const open = dropdown.classList.toggle('open');
-    trigger.classList.toggle('open', open);
-    chevron.classList.toggle('open', open);
+eventsTrigger.addEventListener('click', () => {
+    const open = eventsDropdown.classList.toggle('open');
+    eventsTrigger.classList.toggle('open', open);
+    eventsChevron.classList.toggle('open', open);
 });
 
-trigger.addEventListener('keydown', e => {
+eventsTrigger.addEventListener('keydown', e => {
     if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        trigger.click();
+        eventsTrigger.click();
     }
 });
 
-checkboxes.forEach(cb => cb.addEventListener('change', updateTriggerText));
+eventsCheckboxes.forEach(cb => cb.addEventListener('change', updateEventsTriggerText));
+
+/* Show/hide "Other" text field */
+eventOtherCheckbox.addEventListener('change', () => {
+    if (eventOtherCheckbox.checked) {
+        eventOtherField.style.display = 'block';
+        // Close the dropdown
+        eventsDropdown.classList.remove('open');
+        eventsTrigger.classList.remove('open');
+        eventsChevron.classList.remove('open');
+        // Focus the text field after dropdown closes
+        setTimeout(() => document.getElementById('eventOtherText').focus(), 50);
+    } else {
+        eventOtherField.style.display = 'none';
+        document.getElementById('eventOtherText').value = '';
+    }
+    updateEventsTriggerText();
+});
 
 document.addEventListener('click', e => {
-    if (!document.getElementById('servicesWrapper').contains(e.target)) {
-        dropdown.classList.remove('open');
-        trigger.classList.remove('open');
-        chevron.classList.remove('open');
+    if (!document.getElementById('eventsWrapper').contains(e.target)) {
+        eventsDropdown.classList.remove('open');
+        eventsTrigger.classList.remove('open');
+        eventsChevron.classList.remove('open');
     }
 });
 
-/* ════════════════════════════════════════
-   EmailJS Configuration
-   ─────────────────────────────────────
-   SETUP (free, 2 minutes):
-   1. Go to https://www.emailjs.com and sign up
-   2. Add Gmail as an Email Service → copy the Service ID
-   3. Create an Email Template → copy the Template ID
-      (Use these variables in your template:
-       {{from_name}}, {{mobile}}, {{from_email}}, {{city}},
-       {{bride_name}}, {{groom_name}}, {{wedding_date}},
-       {{venue_location}}, {{guests}}, {{services}},
-       {{budget}}, {{venue_type}}, {{theme}}, {{special}})
-   4. Go to Account → copy your Public Key
-   5. Replace the three placeholders below
-   ════════════════════════════════════════ */
-const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';   // ← replace
-const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';   // ← replace
-const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // ← replace
-
-emailjs.init(EMAILJS_PUBLIC_KEY);
-
-document.getElementById('weddingForm').addEventListener('submit', function (e) {
+/* ── Wedding Form Submission ── */
+document.getElementById('weddingForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
     const form = this;
@@ -87,50 +88,74 @@ document.getElementById('weddingForm').addEventListener('submit', function (e) {
     }
 
     if (!valid) {
-        form.querySelector('.error input, .error textarea, .error .services-trigger')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        form.querySelector('.error input, .error textarea, .error .services-trigger')
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
     }
 
-    /* Gather data */
-    const templateParams = {
-        to_email: 'unicornevents2007@gmail.com',
-        from_name: document.getElementById('name').value.trim(),
+    /* Build event types value */
+    const selectedEvents = [...eventsCheckboxes].filter(c => c.checked).map(c => c.value);
+    let eventTypesValue = selectedEvents.join(', ') || 'None selected';
+    if (eventOtherCheckbox.checked) {
+        const otherText = document.getElementById('eventOtherText').value.trim();
+        if (otherText) {
+            eventTypesValue = eventTypesValue.replace('Other', `Other: ${otherText}`);
+        }
+    }
+
+    /* Gather form data */
+    const data = {
+        name: document.getElementById('name').value.trim(),
         mobile: document.getElementById('mobile').value.trim(),
-        from_email: document.getElementById('email').value.trim(),
+        email: document.getElementById('email').value.trim(),
         city: document.getElementById('city').value.trim(),
         bride_name: document.getElementById('bride').value.trim(),
         groom_name: document.getElementById('groom').value.trim(),
         wedding_date: document.getElementById('wdate').value,
         venue_location: document.getElementById('venue').value.trim(),
         guests: document.getElementById('guests').value.trim(),
-        services: [...checkboxes].filter(c => c.checked).map(c => c.value).join(', ') || 'None selected',
-        budget: '₹' + document.getElementById('budget').value.trim(),
+        services: 'N/A',
+        budget: document.getElementById('budget').value.trim(),
         venue_type: venueType ? venueType.value : '',
-        theme: document.getElementById('theme').value.trim() || '—',
+        theme: eventTypesValue,
         special: document.getElementById('special').value.trim() || '—',
     };
 
-    /* Disable button & show loading */
+    /* Disable button & show sending state */
     const btn = form.querySelector('.submit-btn');
     btn.disabled = true;
     btn.querySelector('.submit-btn-text').textContent = 'Sending…';
 
-    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
-        .then(() => {
+    /* POST to server */
+    try {
+        const res = await fetch('/api/send-wedding', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
             form.style.display = 'none';
             const success = document.getElementById('formSuccess');
             success.style.display = 'flex';
             success.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        })
-        .catch(err => {
-            console.error('EmailJS error:', err);
+        } else {
+            const json = await res.json().catch(() => ({}));
             btn.disabled = false;
             btn.querySelector('.submit-btn-text').textContent = 'Submit Enquiry';
-            document.getElementById('sendError').style.display = 'block';
-        });
+            const errEl = document.getElementById('sendError');
+            if (errEl) errEl.style.display = 'block';
+            console.error('Server error:', json.error, json.detail);
+        }
+    } catch (err) {
+        console.error('Network error:', err);
+        btn.disabled = false;
+        btn.querySelector('.submit-btn-text').textContent = 'Submit Enquiry';
+        alert('Network error — please check your connection and try again.');
+    }
 });
 
-/* Remove error on input */
+/* Remove error highlight on input */
 document.querySelectorAll('input, select, textarea').forEach(el => {
     el.addEventListener('input', () => {
         const parent = el.closest('.field');

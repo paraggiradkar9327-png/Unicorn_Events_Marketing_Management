@@ -5,53 +5,39 @@
   const SECRET_KEY = '`';
   const SECRET_PRESSES = 3;
   const SECRET_WINDOW_MS = 1500;
-  const DB_NAME = 'unicornEventsAdmin';
-  const DB_VERSION = 1;
-  const STORE_NAME = 'heroVideo';
-  const VIDEO_KEY = 'currentVideo';
-  const YT_KEY = 'youtubeVideoId';
 
   let keyPressLog = [];
-  let db = null;
 
-  // ─── INDEXEDDB ────────────────────────────────────────────
-  function openDB() {
-    return new Promise((resolve, reject) => {
-      const req = indexedDB.open(DB_NAME, DB_VERSION);
-      req.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE_NAME);
-      req.onsuccess = (e) => resolve(e.target.result);
-      req.onerror = (e) => reject(e.target.error);
-    });
+  // ─── SERVER API HELPERS ───────────────────────────────────
+
+  async function loadConfigFromServer() {
+    try {
+      const res = await fetch('/api/video-config');
+      return await res.json();
+    } catch (err) {
+      console.warn('[Admin] Could not fetch video config from server:', err);
+      return {};
+    }
   }
 
-  function saveVideoToDB(blob) {
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE_NAME, 'readwrite');
-      tx.objectStore(STORE_NAME).put(blob, VIDEO_KEY).onsuccess = resolve;
+  async function saveYtIdToServer(videoId) {
+    const res = await fetch('/api/set-youtube', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ videoId })
     });
+    if (!res.ok) throw new Error('Server error');
   }
 
-  function getVideoFromDB() {
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE_NAME, 'readonly');
-      const req = tx.objectStore(STORE_NAME).get(VIDEO_KEY);
-      req.onsuccess = (e) => resolve(e.target.result || null);
+  async function uploadVideoToServer(file) {
+    const formData = new FormData();
+    formData.append('video', file);
+    const res = await fetch('/api/upload-video', {
+      method: 'POST',
+      body: formData
     });
-  }
-
-  function saveYtIdToDB(videoId) {
-    return new Promise((resolve) => {
-      const tx = db.transaction(STORE_NAME, 'readwrite');
-      tx.objectStore(STORE_NAME).put(videoId, YT_KEY).onsuccess = resolve;
-    });
-  }
-
-  function getYtIdFromDB() {
-    return new Promise((resolve) => {
-      const tx = db.transaction(STORE_NAME, 'readonly');
-      const req = tx.objectStore(STORE_NAME).get(YT_KEY);
-      req.onsuccess = (e) => resolve(e.target.result || null);
-    });
+    if (!res.ok) throw new Error('Server error');
+    return await res.json();
   }
 
   // ─── YOUTUBE HELPERS ──────────────────────────────────────
@@ -73,13 +59,11 @@
     const ytIframe = document.getElementById('hero-yt-iframe');
     if (!ytWrap || !ytIframe) return;
 
-    // Autoplay + mute so it behaves like the original video
     ytIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&modestbranding=1`;
 
     heroVideo.style.display = 'none';
     ytWrap.style.display = 'block';
 
-    // Click fullscreen on the wrap
     ytWrap.onclick = () => {
       if (ytWrap.requestFullscreen) ytWrap.requestFullscreen();
       else if (ytWrap.webkitRequestFullscreen) ytWrap.webkitRequestFullscreen();
@@ -92,7 +76,6 @@
     const ytWrap = document.getElementById('hero-yt-wrap');
     if (!heroVideo) return;
 
-    // Hide YT if previously set
     if (ytWrap) ytWrap.style.display = 'none';
     heroVideo.style.display = '';
 
@@ -118,17 +101,13 @@
 
     if (!heroSection) return;
 
-    // Click on hero section → go fullscreen + hide text
     heroSection.addEventListener('click', (e) => {
-      // Don't trigger if clicking a button/link inside hero-content
       if (e.target.closest('a, button')) return;
 
-      // Hide overlay text
       if (heroContent) heroContent.classList.add('hero-hidden');
       if (heroOverlay) heroOverlay.classList.add('hero-hidden');
       if (scrollHint) scrollHint.classList.add('hero-hidden');
 
-      // Go fullscreen on whichever is active
       const target = ytWrap && ytWrap.style.display !== 'none' ? ytWrap : heroVideo;
       if (!target) return;
 
@@ -137,7 +116,6 @@
       else if (target.mozRequestFullScreen) target.mozRequestFullScreen();
     });
 
-    // When fullscreen exits → restore text
     document.addEventListener('fullscreenchange', restoreHero);
     document.addEventListener('webkitfullscreenchange', restoreHero);
     document.addEventListener('mozfullscreenchange', restoreHero);
@@ -156,19 +134,14 @@
     }
   }
 
-  // ─── LOAD SAVED STATE ON PAGE LOAD ───────────────────────
+  // ─── LOAD SAVED STATE ON PAGE LOAD (from server) ─────────
   async function loadSavedVideo() {
-    try {
-      db = await openDB();
+    const config = await loadConfigFromServer();
 
-      // Prefer YouTube if set
-      const ytId = await getYtIdFromDB();
-      if (ytId) { applyYouTubeToHero(ytId); return; }
-
-      const blob = await getVideoFromDB();
-      if (blob) applyVideoToHero(URL.createObjectURL(blob));
-    } catch (err) {
-      console.warn('[Admin] Could not load saved video:', err);
+    if (config.type === 'youtube' && config.videoId) {
+      applyYouTubeToHero(config.videoId);
+    } else if (config.type === 'file' && config.src) {
+      applyVideoToHero(config.src);
     }
   }
 
@@ -236,7 +209,7 @@
     document.getElementById('tab-yt').classList.toggle('active', tab === 'yt');
   };
 
-  // ─── YOUTUBE SUBMIT ───────────────────────────────────────
+  // ─── YOUTUBE SUBMIT (now saves to server) ─────────────────
   async function handleYtSubmit() {
     const input = document.getElementById('yt-url-input');
     const error = document.getElementById('yt-url-error');
@@ -249,10 +222,7 @@
     error.textContent = '';
 
     try {
-      // Clear any saved file video so YT takes priority
-      const tx = db.transaction(STORE_NAME, 'readwrite');
-      tx.objectStore(STORE_NAME).delete(VIDEO_KEY);
-      await saveYtIdToDB(videoId);
+      await saveYtIdToServer(videoId);   // ← saves to server (shared by all devices)
       applyYouTubeToHero(videoId);
 
       const btn = document.getElementById('yt-submit-btn');
@@ -266,7 +236,7 @@
     }
   }
 
-  // ─── FILE UPLOAD ──────────────────────────────────────────
+  // ─── FILE UPLOAD (now saves to server) ────────────────────
   function handleFileSelected(file) {
     if (!file) return;
     document.getElementById('upload-filename').textContent = file.name;
@@ -283,22 +253,17 @@
     const bar = document.getElementById('upload-progress-bar');
     const success = document.getElementById('upload-success');
 
-    btn.disabled = true; btn.textContent = 'Saving...';
+    btn.disabled = true; btn.textContent = 'Uploading...';
     progress.classList.add('active');
 
     let pct = 0;
     const ticker = setInterval(() => { pct = Math.min(pct + 8, 85); bar.style.width = pct + '%'; }, 80);
 
     try {
-      // Clear any saved YT id so file takes priority
-      const tx = db.transaction(STORE_NAME, 'readwrite');
-      tx.objectStore(STORE_NAME).delete(YT_KEY);
-
-      await saveVideoToDB(file);
+      const data = await uploadVideoToServer(file);  // ← uploads to server
       clearInterval(ticker); bar.style.width = '100%';
 
-      const url = URL.createObjectURL(file);
-      applyVideoToHero(url);
+      applyVideoToHero(data.src);  // server returns the public URL
 
       setTimeout(() => {
         progress.classList.remove('active'); bar.style.width = '0%';
@@ -313,7 +278,7 @@
     } catch (err) {
       clearInterval(ticker); progress.classList.remove('active'); bar.style.width = '0%';
       btn.disabled = false; btn.textContent = 'Upload Video';
-      alert('Failed to save video. Please try again.');
+      alert('Failed to upload video. Please try again.');
     }
   }
 
@@ -389,7 +354,7 @@
 
   // ─── INIT ─────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
-    loadSavedVideo();
+    loadSavedVideo();       // ← now fetches from server, works on all devices
     initSecretTrigger();
     initEvents();
     initVideoFullscreen();

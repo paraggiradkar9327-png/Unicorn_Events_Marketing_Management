@@ -10,7 +10,6 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <link rel="stylesheet" href="./css/weddingForm.css" />
     <link rel="stylesheet" href="./css/style.css" />
 </head>
@@ -66,9 +65,9 @@
 
                 <!-- ════ 2. WEDDING DETAILS ════ -->
                 <div class="form-section">
-                    <div class="section-eyebrow section-center">Wedding Details</div>
-                    <h2 class="section-title" style="text-align:center;">The <em>Big Day</em></h2>
-                    <div class="section-divider" style="margin-left:auto;margin-right:auto;"></div>
+                    <div class="section-eyebrow section-center">Step 02</div>
+                    <h2 class="section-title">The <em>Big Day</em></h2>
+                    <div class="section-divider"></div>
 
                     <div class="form-grid">
                         <div class="form-row">
@@ -104,54 +103,9 @@
                     </div>
                 </div>
 
-                <!-- ════ 3. SERVICES REQUIRED ════ -->
-                <div class="form-section">
-                    <div class="section-eyebrow">Step 03</div>
-                    <h2 class="section-title">Services <em>Required</em></h2>
-                    <div class="section-divider"></div>
-
-                    <div class="form-grid">
-                        <div class="field">
-                            <label>Select Services</label>
-                            <div class="services-wrapper" id="servicesWrapper">
-                                <div class="services-trigger" id="servicesTrigger" tabindex="0">
-                                    <span class="services-trigger-text" id="servicesTriggerText">Choose services…</span>
-                                    <svg class="services-chevron" id="servicesChevron" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24" stroke-width="1.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                    </svg>
-                                </div>
-                                <div class="services-dropdown" id="servicesDropdown">
-                                    <label class="service-option">
-                                        <input type="checkbox" name="services" value="Planning & Decor" />
-                                        <span class="service-checkmark"></span>
-                                        <span class="service-option-label">Planning &amp; Decor</span>
-                                    </label>
-                                    <label class="service-option">
-                                        <input type="checkbox" name="services" value="Photography" />
-                                        <span class="service-checkmark"></span>
-                                        <span class="service-option-label">Photography</span>
-                                    </label>
-                                    <label class="service-option">
-                                        <input type="checkbox" name="services" value="Guest Management" />
-                                        <span class="service-checkmark"></span>
-                                        <span class="service-option-label">Guest Management</span>
-                                    </label>
-                                    <label class="service-option">
-                                        <input type="checkbox" name="services" value="DJ & Sound" />
-                                        <span class="service-checkmark"></span>
-                                        <span class="service-option-label">DJ &amp; Sound</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- ════ 4. BUDGET ════ -->
                 <div class="form-section">
-                    <div class="section-eyebrow">Step 04</div>
+                    <div class="section-eyebrow">Step 03</div>
                     <h2 class="section-title">Budget <em>Planning</em></h2>
                     <div class="section-divider"></div>
 
@@ -171,7 +125,7 @@
 
                 <!-- ════ 5. PREFERENCES ════ -->
                 <div class="form-section">
-                    <div class="section-eyebrow">Step 05</div>
+                    <div class="section-eyebrow">Step 04</div>
                     <h2 class="section-title">Your <em>Preferences</em></h2>
                     <div class="section-divider"></div>
 
@@ -191,12 +145,59 @@
                                 </label>
                             </div>
                         </div>
-
                         <div class="field">
-                            <label for="theme">Theme Preference</label>
-                            <textarea id="theme" name="theme_preference"
-                                placeholder="Describe your dream wedding theme, colour palette, style…"></textarea>
+                            <label>Types of Events</label>
+                            <div class="services-wrapper" id="eventsWrapper">
+                                <div class="services-trigger" id="eventsTrigger" tabindex="0">
+                                    <span class="services-trigger-text" id="eventsTriggerText">Choose event
+                                        types…</span>
+                                    <svg class="services-chevron" id="eventsChevron" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                    </svg>
+                                </div>
+                                <div class="services-dropdown" id="eventsDropdown">
+                                    <label class="service-option">
+                                        <input type="checkbox" name="event_types" value="Wedding" />
+                                        <span class="service-checkmark"></span>
+                                        <span class="service-option-label">Wedding</span>
+                                    </label>
+                                    <label class="service-option">
+                                        <input type="checkbox" name="event_types" value="Haldi" />
+                                        <span class="service-checkmark"></span>
+                                        <span class="service-option-label">Haldi</span>
+                                    </label>
+                                    <label class="service-option">
+                                        <input type="checkbox" name="event_types" value="Sangeet" />
+                                        <span class="service-checkmark"></span>
+                                        <span class="service-option-label">Sangeet</span>
+                                    </label>
+                                    <label class="service-option">
+                                        <input type="checkbox" name="event_types" value="Reception" />
+                                        <span class="service-checkmark"></span>
+                                        <span class="service-option-label">Reception</span>
+                                    </label>
+                                    <label class="service-option">
+                                        <input type="checkbox" name="event_types" value="Mehendi" />
+                                        <span class="service-checkmark"></span>
+                                        <span class="service-option-label">Mehendi</span>
+                                    </label>
+                                    <label class="service-option">
+                                        <input type="checkbox" name="event_types" value="Other"
+                                            id="eventOtherCheckbox" />
+                                        <span class="service-checkmark"></span>
+                                        <span class="service-option-label">Other</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="eventOtherField" style="display:none;margin-top:10px;">
+                                <input type="text" id="eventOtherText" name="event_other"
+                                    placeholder="Please specify the event type…" />
+                            </div>
                         </div>
+
+
 
                         <div class="field">
                             <label for="special">Special Requirements</label>
@@ -222,6 +223,10 @@
                     </div>
                 </div>
         </div>
+
+
+
+
 
         </form>
 

@@ -304,31 +304,7 @@
   <!-- ── SHARED FOOTER (injected by components.js) ── -->
   <div data-component="footer"></div>
 
-  <!-- Contact form validation (page-specific inline script) -->
-  <script>
-    document.addEventListener('components:loaded', function () {
-      const form = document.getElementById('contact-form');
-      const success = document.getElementById('ct-success');
-      if (!form || !success) return;
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        const required = form.querySelectorAll('[required]');
-        let valid = true;
-        required.forEach(field => {
-          field.classList.remove('ct-field-error');
-          if (!field.value.trim() || (field.type === 'checkbox' && !field.checked)) {
-            field.classList.add('ct-field-error');
-            valid = false;
-          }
-        });
-        if (valid) {
-          form.style.display = 'none';
-          success.style.display = 'flex';
-        }
-      });
-    });
-  </script>
-
+  <script src="./js/contact.js"></script>
   <script src="js/components.js"></script>
   <script src="js/main.js"></script>
 </body>
