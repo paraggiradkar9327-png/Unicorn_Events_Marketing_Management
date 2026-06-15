@@ -200,7 +200,7 @@
         width: 100%;
         appearance: none;
         -webkit-appearance: none;
-        border-radius: 0;
+        border-radius: var(--btn-radius);
     }
 
     .field select {

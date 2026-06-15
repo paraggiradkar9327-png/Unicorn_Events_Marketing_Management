@@ -128,7 +128,7 @@ document.getElementById('weddingForm').addEventListener('submit', async function
 
     /* POST to server */
     try {
-        const res = await fetch('/api/send-wedding', {
+        const res = await fetch('/Unicorn_Events_Marketing_Management/send-wedding.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)

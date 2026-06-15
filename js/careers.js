@@ -29,7 +29,7 @@
     /* ───────────────── SERVER API ───────────────── */
     async function fetchJobs() {
         try {
-            const res = await fetch('/api/jobs');
+            const res = await fetch('/Unicorn_Events_Marketing_Management/api/jobs.php');
             jobs = await res.json();
             renderJobs();
         } catch (err) {
@@ -38,7 +38,7 @@
     }
 
     async function postJobToServer(data) {
-        const res = await fetch('/api/jobs', {
+        const res = await fetch('/Unicorn_Events_Marketing_Management/api/jobs.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
@@ -48,15 +48,15 @@
     }
 
     async function deleteJobFromServer(id) {
-        const res = await fetch(`/api/jobs/${id}`, { method: 'DELETE' });
+        const res = await fetch(`/Unicorn_Events_Marketing_Management/api/jobs.php?id=${id}`, { method: 'DELETE' });
         if (!res.ok) throw new Error('Server error');
     }
 
     /* ───────────────── TEMPLATE HELPERS ───────────────── */
     const icon = {
         location: `<svg viewBox="0 0 24 24"><path d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>`,
-        clock:    `<svg viewBox="0 0 24 24"><path d="M12 6v6h4.5"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
-        money:    `<svg viewBox="0 0 24 24"><path d="M12 6v12"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`
+        clock: `<svg viewBox="0 0 24 24"><path d="M12 6v6h4.5"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+        money: `<svg viewBox="0 0 24 24"><path d="M12 6v12"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`
     };
 
     const createTag = (svg, text) => `<span class="job-tag">${svg}${text}</span>`;
@@ -108,7 +108,7 @@
                     ${job.salary ? createTag(icon.money, formatSalary(job.salary)) : ''}
                 </div>
                 <div class="job-apply-row">
-                    <p>Apply: <a href="mailto:support@unicornevent.com?subject=${encodeURIComponent(`Application: ${job.title}`)}">support@unicornevent.com</a></p>
+                    <p>Apply: <a href="mailto:unicornevents2007@gmail.com?subject=${encodeURIComponent(`Application: ${job.title}`)}">unicornevents2007@gmail.com</a></p>
                 </div>
             </article>
         `).join('');
@@ -193,7 +193,7 @@
         });
 
         // ── Post Job ──
-        const formFields = ['job-title','job-location','job-experience','job-salary','job-desc','job-skills'];
+        const formFields = ['job-title', 'job-location', 'job-experience', 'job-salary', 'job-desc', 'job-skills'];
 
         function clearForm() {
             formFields.forEach(id => { const el = $(`#${id}`); if (el) el.value = ''; });
@@ -205,15 +205,15 @@
 
         $('#post-job-btn')?.addEventListener('click', async () => {
             const data = {
-                title:      $('#job-title')?.value.trim(),
-                dept:       $('#job-dept')?.value,
-                type:       $('#job-type')?.value,
-                location:   $('#job-location')?.value.trim(),
+                title: $('#job-title')?.value.trim(),
+                dept: $('#job-dept')?.value,
+                type: $('#job-type')?.value,
+                location: $('#job-location')?.value.trim(),
                 experience: $('#job-experience')?.value.trim(),
-                salary:     $('#job-salary')?.value.trim(),
-                desc:       $('#job-desc')?.value.trim(),
-                skills:     $('#job-skills')?.value.split(',').map(s => s.trim()).filter(Boolean),
-                urgent:     $('#job-urgent')?.value === 'true'
+                salary: $('#job-salary')?.value.trim(),
+                desc: $('#job-desc')?.value.trim(),
+                skills: $('#job-skills')?.value.split(',').map(s => s.trim()).filter(Boolean),
+                urgent: $('#job-urgent')?.value === 'true'
             };
 
             const postError = $('#post-error');

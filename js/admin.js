@@ -12,7 +12,7 @@
 
   async function loadConfigFromServer() {
     try {
-      const res = await fetch('/api/video-config');
+      const res = await fetch('/Unicorn_Events_Marketing_Management/api/video-config.php');
       return await res.json();
     } catch (err) {
       console.warn('[Admin] Could not fetch video config from server:', err);
@@ -21,7 +21,7 @@
   }
 
   async function saveYtIdToServer(videoId) {
-    const res = await fetch('/api/set-youtube', {
+    const res = await fetch('/Unicorn_Events_Marketing_Management/api/set-youtube.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ videoId })
@@ -32,7 +32,7 @@
   async function uploadVideoToServer(file) {
     const formData = new FormData();
     formData.append('video', file);
-    const res = await fetch('/api/upload-video', {
+    const res = await fetch('/Unicorn_Events_Marketing_Management/api/upload-video.php', {
       method: 'POST',
       body: formData
     });

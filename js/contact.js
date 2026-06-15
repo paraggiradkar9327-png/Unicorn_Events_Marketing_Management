@@ -37,7 +37,7 @@ document.addEventListener('components:loaded', function () {
 
         // ── POST to your server (server.js forwards to Web3Forms) ──
         try {
-            const res = await fetch('/api/send-contact', {
+            const res = await fetch('/Unicorn_Events_Marketing_Management/send-contact.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)

@@ -19,6 +19,7 @@
   --border: rgba(255, 255, 255, 0.08);
   --serif: 'Playfair Display', serif;
   --sans: 'Inter', sans-serif;
+  --btn-radius: 3px;
 }
 
 html {
@@ -382,6 +383,7 @@ img {
   cursor: pointer;
   transition: all 0.3s;
   border: none;
+  border-radius: var(--btn-radius);
 }
 
 .btn-gold {
@@ -1146,6 +1148,7 @@ footer {
   justify-content: center;
   transition: border-color 0.3s, color 0.3s;
   color: var(--fg2);
+  border-radius: var(--btn-radius)
 }
 
 .footer-social:hover {
