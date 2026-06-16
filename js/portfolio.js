@@ -2,7 +2,7 @@ const portfolioData = [
     {
         title: "Corporate Event",
         category: "Events",
-        image: "assets/event-port-img-1.webp"
+        image: "assets/portfolioImage/event-port-1.webp"
     },
     {
         title: "Brand Campaign",

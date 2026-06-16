@@ -22,8 +22,11 @@
 
   /** Derive the base page name from the URL (e.g. "about", "contact", "index") */
   function currentPage() {
-    const path = window.location.pathname.split('/').pop() || 'index.html';
-    return path.replace('.html', '') || 'index';
+    const path = window.location.pathname.split('/').pop() || 'index.php';
+
+    return path
+      .replace('.html', '')
+      .replace('.php', '') || 'index';
   }
 
   /** Fetch an HTML fragment and return its text */
