@@ -86,6 +86,7 @@ $categories = ['Events', 'Branding', 'Activation', 'Wedding'];
     <div data-component="footer"></div>
 
     <script src="js/components.js"></script>
+    <script src="js/main.js"></script>
 
     <script>
 
@@ -125,30 +126,29 @@ $categories = ['Events', 'Branding', 'Activation', 'Wedding'];
         const popupImage = document.getElementById('popupImage');
         const closePopup = document.querySelector('.close-popup');
 
-        document.querySelectorAll('.portfolio-item img').forEach(img => {
+       document.querySelectorAll('.portfolio-item img').forEach(img => {
 
-            img.addEventListener('click', () => {
+    img.addEventListener('click', () => {
+        popup.classList.add('active');
+        popupImage.src = img.src;
+    });
 
-                popup.style.display = 'flex';
-                popupImage.src = img.src;
+});
 
-            });
+closePopup.addEventListener('click', () => {
+    popup.classList.remove('active');
+});
 
-        });
-
-        closePopup.addEventListener('click', () => {
-
-            popup.style.display = 'none';
-
-        });
-
-        popup.addEventListener('click', (e) => {
-
-            if (e.target === popup) {
-                popup.style.display = 'none';
-            }
-
-        });
+popup.addEventListener('click', (e) => {
+    if (e.target === popup) {
+        popup.classList.remove('active');
+    }
+});
+        document.querySelectorAll('.portfolio-image').forEach(img => {
+    img.addEventListener('click', () => {
+        img.classList.toggle('expanded');
+    });
+});
 
     </script>
 

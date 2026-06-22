@@ -23,23 +23,24 @@
 
   // ─── MOBILE MENU ─────────────────────────────────────────
   function initMobileMenu() {
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobile-menu');
-    if (!hamburger || !mobileMenu) return;
+    document.addEventListener('click', function (e) {
+      const hamburger = e.target.closest('#hamburger');
 
-    hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('open');
-      mobileMenu.classList.toggle('open');
-    });
+      if (hamburger) {
+        const mobileMenu = document.getElementById('mobile-menu');
 
-    // Use event delegation instead of attaching a listener per link
-    mobileMenu.addEventListener('click', (e) => {
-      if (e.target.closest('a')) {
-        hamburger.classList.remove('open');
-        mobileMenu.classList.remove('open');
+        hamburger.classList.toggle('open');
+        mobileMenu.classList.toggle('open');
+        return;
+      }
+
+      if (e.target.closest('#mobile-menu a')) {
+        document.getElementById('hamburger')?.classList.remove('open');
+        document.getElementById('mobile-menu')?.classList.remove('open');
       }
     });
   }
+
 
   // ─── SCROLL-TRIGGERED FADE-IN ANIMATIONS ─────────────────
   function initScrollAnimations() {

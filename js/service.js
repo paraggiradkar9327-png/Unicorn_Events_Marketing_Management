@@ -32,5 +32,5 @@
   const hash = window.location.hash.replace('#', '');
   const valid = ['events', 'activation', 'wedding', 'branding'];
   if (hash && valid.includes(hash)) activateTab(hash);
-  else activateTab('events');
+  else activateTab(hash);
 })();

@@ -44,8 +44,20 @@ document.addEventListener('components:loaded', function () {
             });
 
             if (res.ok) {
-                form.style.display = 'none';
+
+                // Hide form fields
+                form.querySelectorAll('.ct-field, .ct-form-row, .ct-submit-btn').forEach(el => {
+                    el.style.display = 'none';
+                });
+
+                // Show success message
                 success.style.display = 'flex';
+
+                // Scroll to success message
+                success.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
             } else {
                 const json = await res.json().catch(() => ({}));
                 alert('Sorry, something went wrong: ' + (json.detail || json.error || 'Please try again.'));
